@@ -1,0 +1,176 @@
+
+
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+
+  <meta charset="UTF-8">
+  
+<link rel="apple-touch-icon" type="image/png" href="https://cpwebassets.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png" />
+<meta name="apple-mobile-web-app-title" content="CodePen">
+
+<link rel="shortcut icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico" />
+
+<link rel="mask-icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg" color="#111" />
+
+
+  <title>CodePen - Tic Tac Toe (Vanilla JS)</title>
+  
+  
+  
+  
+<style>
+table {
+  background-color:#add8e6;
+	border-collapse:collapse;
+}
+
+td {
+	background-color: black;
+	border: 3px solid white;
+	font-size:80px;
+ 
+	color:#ffffff;
+	border-radius: 20px 20px 20px 20px;
+}
+</style>
+
+  
+  
+  
+  
+
+</head>
+
+<body translate="no" >
+  <body bgcolor="yellow">
+<div id="tictactoe"></div>
+		<div align="left">
+      <h1>Tic tac Toe by Swapnil</h1>
+			<span id='turn'>Player X</span>
+		</div>
+  
+  
+      <script id="rendered-js" >
+/*
+ * Tic Tac Toe
+ *
+ * A Tic Tac Toe game in HTML/JavaScript/CSS.
+ *
+ * @author: Swapnilpradhan
+ */
+	var N_SIZE = 3,
+		EMPTY = "&nbsp;",
+		boxes = [],
+		turn = "X",
+		score,
+		moves;
+
+	/*
+	 * Initializes the Tic Tac Toe board and starts the game.
+	 */
+	function init() {
+		var board = document.createElement('table');
+    board.setAttribute("border", 1);
+    board.setAttribute("cellspacing", 0);
+    
+		var identifier = 1;
+		for (var i = 0; i < N_SIZE; i++) {
+			var row = document.createElement('tr');
+			board.appendChild(row);
+			for (var j = 0; j < N_SIZE; j++) {
+        var cell = document.createElement('td');
+        cell.setAttribute('height', 120);
+        cell.setAttribute('width', 120);
+        cell.setAttribute('align', 'center');
+        cell.setAttribute('valign', 'center');
+				cell.classList.add('col' + j,'row' + i);
+				if (i == j) {
+					cell.classList.add('diagonal0');
+				}
+				if (j == N_SIZE - i - 1) {
+					cell.classList.add('diagonal1');
+				}
+				cell.identifier = identifier;
+				cell.addEventListener("click", set);
+				row.appendChild(cell);
+				boxes.push(cell);
+				identifier += identifier;
+			}
+		}
+
+		document.getElementById("tictactoe").appendChild(board);
+		startNewGame();
+	}
+
+	/*
+	 * New game
+	 */
+	function startNewGame() {
+		score = {
+			"X": 0,
+			"O": 0
+		};
+		moves = 0;
+		turn = "X";
+		boxes.forEach(function (square) {
+			square.innerHTML = EMPTY;
+		});
+	}
+
+	/*
+	 * Check if a win or not
+	 */
+	function win(clicked) {
+		// Get all cell classes
+		var memberOf = clicked.className.split(/\s+/);
+		for (var i = 0; i < memberOf.length; i++) {
+			var testClass = '.' + memberOf[i];
+      var items = contains('#tictactoe ' + testClass, turn);
+			// winning condition: turn == N_SIZE
+			if (items.length == N_SIZE) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+function contains(selector, text) {
+  var elements = document.querySelectorAll(selector);
+  return [].filter.call(elements, function(element){
+    return RegExp(text).test(element.textContent);
+  });
+}
+
+	/*
+	 * Sets clicked square and also updates the turn.
+	 */
+	function set() {
+		if (this.innerHTML !== EMPTY) {
+			return;
+		}
+		this.innerHTML = turn;
+		moves += 1;
+		score[turn] += this.identifier;
+		if (win(this)) {
+			alert('Winner: Player ' + turn);
+			startNewGame();
+		} else if (moves === N_SIZE * N_SIZE) {
+			alert("Draw");
+			startNewGame();
+		} else {
+			turn = turn === "X" ? "O" : "X";
+			document.getElementById('turn').textContent = 'Player ' + turn;
+		}
+	}
+
+	init();
+    </script>
+
+  
+
+</body>
+
+</html>
+ 
